@@ -1,0 +1,49 @@
+def is_prime(n):
+    if n < 2: return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def run_diffie_hellman(p, g, a, b):
+    # 1. Validation
+    if not is_prime(p):
+        return "Error: p must be prime."
+    if not (1 < g < p):
+        return "Error: g must be between 1 and p."
+    
+    print(f"--- Public Parameters ---")
+    print(f"Prime (p): {p}")
+    print(f"Generator (g): {g}\n")
+
+    # 2. Private Keys (Secret)
+    print(f"--- Private Keys (Keep these secret) ---")
+    print(f"Alice's private key (a): {a}")
+    print(f"Bob's private key (b): {b}\n")
+
+    # 3. Compute Public Keys
+    # Formula: A = g^a mod p
+    A = pow(g, a, p)
+    B = pow(g, b, p)
+
+    print(f"--- Public Key Computation ---")
+    print(f"Alice's public key (A): {g}^{a} mod {p} = {A}")
+    print(f"Bob's public key (B): {g}^{b} mod {p} = {B}\n")
+
+    # 4. Compute Shared Secret
+    # Alice takes Bob's public key B and raises it to her private key a
+    s_alice = pow(B, a, p)
+    # Bob takes Alice's public key A and raises it to his private key b
+    s_bob = pow(A, b, p)
+
+    print(f"--- Shared Secret Computation ---")
+    print(f"Alice computes: {B}^{a} mod {p} = {s_alice}")
+    print(f"Bob computes: {A}^{b} mod {p} = {s_bob}\n")
+
+    if s_alice == s_bob:
+        print(f"Success! Shared Secret Key: {s_alice}")
+    else:
+        print("Error: Shared secrets do not match.")
+
+# Example usage (matching your HTML defaults)
+run_diffie_hellman(p=23, g=5, a=6, b=15)
